@@ -24,7 +24,7 @@ test:
 package:
 	cd ./echosrv;make package
 	cd ./echosrv_test;make package
-	cd ./package;tar cvf echosrv.tar echosrv echosrv_test
+	cd ./package;tar cvf echosrv.tar echosrv echosrv_test;gzip echosrv.tar
 
 publish:
 	cd ./package;/usr/local/accord/bin/deployfile.sh echosrv.tar.gz jenkins-snapshot/echosrv/latest
