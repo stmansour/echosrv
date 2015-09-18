@@ -1,4 +1,4 @@
-all: clean build test
+all: clean build package test
 	@echo "*** COMPLETED ***"
 
 .PHONY:  test
@@ -18,8 +18,9 @@ clean:
 	@echo "*** CLEAN COMPLETE ***"
 
 test:
-	cd echosrv;make test
-	cd echosrv_test;make test
+	./dotest.sh
+	@echo "*** TEST COMPLETE ***"
+
 
 package:
 	cd ./echosrv;make package

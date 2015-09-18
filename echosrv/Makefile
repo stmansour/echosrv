@@ -1,4 +1,4 @@
-all: clean build
+all: clean build package
 	@echo "*** COMPLETED ***"
 
 .PHONY:  test
@@ -18,7 +18,7 @@ clean:
 	@echo "*** CLEAN COMPLETE ***"
 
 test:
-	echo "please package and run tests in package dir"
+	@echo "*** TEST COMPLETE ***"
 
 coverage:
 	go test -coverprofile=c.out

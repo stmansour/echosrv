@@ -1,4 +1,4 @@
-all: clean build test
+all: clean build package
 	@echo "*** COMPLETED ***"
 
 .PHONY:  test
