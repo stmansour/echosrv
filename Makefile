@@ -27,5 +27,5 @@ package:
 	cd ./package;tar cvf echosrv.tar echosrv echosrv_test
 
 publish:
-	cd ./package;deployfile.sh echosrv.tar.gz jenkins-snapshot/echosrv/latest
+	cd ./package;/usr/local/accord/bin/deployfile.sh echosrv.tar.gz jenkins-snapshot/echosrv/latest
 
