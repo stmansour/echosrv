@@ -9,7 +9,7 @@ install: package
 build: *.go
 	go fmt
 	go vet
-	golint
+	if [ "Darwin" == "`uname`" ]; then golint; fi
 	go build
 	@echo "*** BUILD COMPLETED ***"
 
