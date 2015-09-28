@@ -9,6 +9,7 @@ install: package
 build: *.go
 	go fmt
 	go vet
+	golint
 	go build
 	@echo "*** BUILD COMPLETED ***"
 
