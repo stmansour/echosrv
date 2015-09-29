@@ -15,7 +15,7 @@ build: *.go
 
 clean:
 	go clean
-	rm -f *.log
+	rm -f *.log *.txt
 	@echo "*** CLEAN COMPLETE ***"
 
 test:

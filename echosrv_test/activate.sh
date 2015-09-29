@@ -40,16 +40,23 @@ init() {
 }
 
 citestit() {
-	init
-	N=$(ps -ef|grep echosrv|grep -v grep|wc -l)
-	if [ ${N} -eq 0 ]; then
-		../echosrv/echosrv >echosrv.log 2>&1 &
-	fi
-	./echosrv_test > test.log
-	if [ ${N} -eq 0 ]; then
-		pushd ../echosrv;./activate.sh STOP;popd
-	fi
-	PassFail
+        init
+        N=$(ps -ef|grep echosrv|grep -v grep|wc -l)
+        date > citest.log
+        if [ ${N} -eq 0 ]; then
+                echo "echsrv not running. Will attempt to start it" >> citest.log &
+                ../echosrv/echosrv >echosrv.log 2>&1 &
+                sleep 1
+                m=$(ps -ef|grep echosrv|grep -v grep|wc -l)
+                echo "count of running echsrv(s) after starting it: ${m}" >> citest.log
+        fi
+        ./echosrv_test > test.log
+        if [ ${N} -eq 0 ]; then
+                echo "stopping echosrv" >> citest.log &
+                pushd ../echosrv;./activate.sh STOP;popd
+        fi
+        echo "calling standard pass/fail checker" >> citest.log &
+        PassFail
 }
 
 testit() {
@@ -88,6 +95,7 @@ for arg do
 		;;
 	"test")
 		testit
+		echo "OK"
 		;;
 	"teststatus")
 		if [ -f ${TESTSTART} ]; then
