@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"net"
 	"os"
@@ -12,7 +13,11 @@ const port = 8200
 
 func main() {
 	h, _ := os.Hostname()
-	hp := fmt.Sprintf("%s:%d", h, port)
+	hptr := flag.String("h", h, "echosrv host")
+	pPtr := flag.Int("p", port, "echosrv port")
+	flag.Parse()
+	fmt.Printf("Host = %s, port = %d\n", *hptr, *pPtr)
+	hp := fmt.Sprintf("%s:%d", *hptr, *pPtr)
 
 	// test 1
 	conn, err := net.Dial("tcp", hp)
