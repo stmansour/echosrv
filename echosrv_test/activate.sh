@@ -3,7 +3,7 @@
 
 TESTRESULTS="testresults.txt"
 TESTSTART="teststart.txt"
-HOST="localhost"
+HOST="$(hostname)"
 PORT=8200
 LOGFILE="test.log"
 CILOGFILE="citest.log"
