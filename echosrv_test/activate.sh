@@ -3,10 +3,18 @@
 
 TESTRESULTS="testresults.txt"
 TESTSTART="teststart.txt"
+HOST="localhost"
+PORT=8200
+LOGFILE="test.log"
+CILOGFILE="citest.log"
+
 usage() {
     cat << ZZEOF
 
-Usage:   activate.sh cmd
+Usage:   activate.sh [OPTIONS] cmd
+OPTIONS:
+	-h host        // the hostname where echosrv is running
+	-p port        // the port on which echosrv is listening
 cmd is one of: start | stop | ready | test | teststatus
 
 cmd is case insensitive
@@ -24,10 +32,10 @@ ZZEOF
 }
 
 PassFail() {
-	C=$(tail -n 1 test.log | grep Passed | wc -l) 
+	C=$(tail -n 1 ${LOGFILE} | grep Passed | wc -l) 
 	if [ ${C} -eq 1 ]; then
 		echo "PASS" > ${TESTRESULTS}
-		rm -f test.log
+		rm -f ${LOGFILE}
 	else
 		echo "FAIL" > ${TESTRESULTS}
 	fi
@@ -42,34 +50,38 @@ init() {
 citestit() {
         init
         N=$(ps -ef|grep echosrv|grep -v grep|wc -l)
-        date > citest.log
+        date > ${CILOGFILE}
         if [ ${N} -eq 0 ]; then
-                echo "echsrv not running. Will attempt to start it" >> citest.log &
+                echo "echsrv not running. Will attempt to start it" >> ${CILOGFILE} &
                 ../echosrv/echosrv >echosrv.log 2>&1 &
                 sleep 1
                 m=$(ps -ef|grep echosrv|grep -v grep|wc -l)
-                echo "count of running echsrv(s) after starting it: ${m}" >> citest.log
+                echo "count of running echsrv(s) after starting it: ${m}" >> ${CILOGFILE}
         fi
-        ./echosrv_test > test.log
+        ./echosrv_test -h ${HOST} -p {PORT} > ${LOGFILE}
         if [ ${N} -eq 0 ]; then
-                echo "stopping echosrv" >> citest.log &
+                echo "stopping echosrv" >> ${CILOGFILE} &
                 pushd ../echosrv;./activate.sh STOP;popd
         fi
-        echo "calling standard pass/fail checker" >> citest.log &
+        echo "calling standard pass/fail checker" >> ${CILOGFILE} &
         PassFail
 }
 
 testit() {
 	init
-	./echosrv_test >test.log
+	echo "./echosrv_test -h ${HOST} -p {PORT}" >${LOGFILE}
+	./echosrv_test -h ${HOST} -p {PORT} >${LOGFILE}
 	PassFail
 }
 
-while getopts ":p:ih:" o; do
+while getopts ":p:h:u" o; do
     case "${o}" in
-        h)
+        u)
             usage
             ;;
+        h)
+			HOST=${OPTARG}
+			;;
         p)
             PORT=${OPTARG}
 	    echo "PORT set to: ${PORT}"
