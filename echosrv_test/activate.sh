@@ -70,7 +70,7 @@ citestit() {
 testit() {
 	init
 	echo "./echosrv_test -h ${HOST} -p {PORT}" >${LOGFILE}
-	./echosrv_test -h ${HOST} -p {PORT} >${LOGFILE}
+	./echosrv_test -h ${HOST} -p ${PORT} >${LOGFILE}
 	PassFail
 }
 
@@ -81,10 +81,11 @@ while getopts ":p:h:u" o; do
             ;;
         h)
 			HOST=${OPTARG}
+			echo "HOST set to ${HOST}"
 			;;
         p)
             PORT=${OPTARG}
-	    echo "PORT set to: ${PORT}"
+	    	echo "PORT set to: ${PORT}"
             ;;
         *)
             usage
