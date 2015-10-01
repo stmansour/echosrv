@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -10,7 +11,7 @@ import (
 	"strings"
 )
 
-const port = 8200
+var port int
 
 // simple admin capability on port+1
 // send "shutdown" to stop the service (unceremoniously)
@@ -31,11 +32,15 @@ func echoAdmin(h string, p int) {
 }
 
 func main() {
+	port = 8200
 	h, _ := os.Hostname()
+	pPtr := flag.Int("p", port, "echosrv port")
+	flag.Parse()
+	port = *pPtr
 	hp := fmt.Sprintf("%s:%d", h, port)
+	fmt.Printf("echosrv listening on %s\n", hp)
 
 	go echoAdmin(h, port+1)
-
 	lstnr, err := net.Listen("tcp", hp)
 	if nil != err {
 		fmt.Printf("echosrv listening on %s:  %s\n", hp, err)
