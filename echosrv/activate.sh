@@ -1,5 +1,5 @@
 #!/bin/bash
-# activation script for tgo
+# activation script for echosrv
 
 usage() {
     cat << ZZEOF

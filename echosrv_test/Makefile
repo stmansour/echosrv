@@ -1,3 +1,5 @@
+ACCORDBIN=/usr/local/accord/bin
+
 all: clean build package
 	@echo "*** COMPLETED ***"
 
@@ -7,8 +9,8 @@ install: package
 	@echo "*** INSTALL COMPLETED ***"
 
 build: *.go
-	go fmt
-	go vet
+	# go fmt
+	/usr/local/accord/bin/govet.sh
 	gl=$(which golint);if [ "x${gl}" != "x" ]; then golint; fi
 	go build
 	@echo "*** BUILD COMPLETED ***"
